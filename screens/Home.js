@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Text, View, StyleSheet, TextInput, TouchableWithoutFeedback, Keyboard, Switch, Button } from "react-native";
 import Header from "../components/header";
 
-const Home = () => {
+const Home = ({ navigation }) => {
 
     const [name, setName] = useState("Guest")
     const [safe, setSafe] = useState(true)
@@ -16,7 +16,7 @@ const Home = () => {
                 <View style={styles.container}>
                     <Text style={styles.text}>Enter Name</Text>
                     <TextInput
-                        placeholder="eg: Paras Roy"
+                        placeholder="eg: Paras Roy (max 20 char)"
                         placeholderTextColor='#888'
                         style={styles.textInput}
                         maxLength={40}
@@ -32,7 +32,7 @@ const Home = () => {
                         />
                         <Text style={styles.drivingStyleText}>Non - Aggressive</Text>
                     </View>
-                    <Button title="Start Journey" onPress={ ()=>alert(name+safe) } />
+                    <Button title="Start Journey" onPress={ ()=>navigation.navigate('Logger', {name: name, driveStyle: safe?"Normal":"Aggresive"}) } />
                 </View>
             </View>
         </TouchableWithoutFeedback>

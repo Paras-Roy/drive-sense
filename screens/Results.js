@@ -1,10 +1,11 @@
-import { Text } from "react-native";
+import { Keyboard, Text, TouchableWithoutFeedback } from "react-native";
 
 const Results = () => {
     return ( 
-        <Text>
-            Results
-        </Text>
+        <TouchableWithoutFeedback
+        onPress={()=>Keyboard.dismiss()}>
+
+        </TouchableWithoutFeedback>
      );
 }
  
