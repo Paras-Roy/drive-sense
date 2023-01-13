@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Text, View, StyleSheet, TextInput, TouchableWithoutFeedback, Keyboard, Button, TouchableOpacity } from "react-native";
+import { Text, View, StyleSheet, TextInput, TouchableWithoutFeedback, Keyboard, Button, TouchableOpacity,} from "react-native";
 import Header from "../components/header";
 
 const Home = ({ navigation }) => {
