@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Text, View, StyleSheet, TextInput, TouchableWithoutFeedback, Keyboard, Switch, Button } from "react-native";
+import { Text, View, StyleSheet, TextInput, TouchableWithoutFeedback, Keyboard, Button, TouchableOpacity } from "react-native";
 import Header from "../components/header";
 
 const Home = ({ navigation }) => {
@@ -14,25 +14,46 @@ const Home = ({ navigation }) => {
             <View style={styles.wrapper}>
                 <Header />
                 <View style={styles.container}>
-                    <Text style={styles.text}>Enter Name</Text>
+                    <View style={styles.banner}>
+                        <Text style = {styles.bannerTitle}>Drive Sense</Text>
+                        <Text style = {styles.bannerInfo}>Log Driving Data</Text>
+                    </View>
+                    <Text style={styles.text}>Enter Driver's Name</Text>
                     <TextInput
-                        placeholder="eg: Paras Roy (max 20 char)"
-                        placeholderTextColor='#888'
+                        placeholder="eg: Paras Roy"
+                        placeholderTextColor='#777'
                         style={styles.textInput}
                         maxLength={40}
                         onChangeText={(data) => setName(data)} />
-                    <Text style={styles.text}>Choose Driving Style</Text>
+                    {/* <Text style={styles.text}>Choose Driving Style</Text> */}
                     <View style = {styles.drivingStyleContainer}>
-                        <Text style={styles.drivingStyleText}>Aggressive</Text>
-                    <Switch
+                    {/* <Switch
                         trackColor={{ false: "#555", true: "#333" }}
                             thumbColor={safe ? "#292" : "#922"}
                             value={safe}
                             onValueChange={()=>setSafe(previousState => !previousState)}
-                        />
-                        <Text style={styles.drivingStyleText}>Non - Aggressive</Text>
+                        /> */}
+                        <TouchableOpacity
+                            onPress={() => setSafe(true)
+                            }>
+                            <Text style={safe ? styles.drivingStyleTextActive : styles.drivingStyleText}>
+                                Normal
+                            </Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            onPress={() => setSafe(false)
+                            }>
+                            <Text style={safe ? styles.drivingStyleText : styles.drivingStyleTextActive}>
+                                Aggressive
+                            </Text>
+                        </TouchableOpacity>
                     </View>
-                    <Button title="Start Journey" onPress={ ()=>navigation.navigate('Logger', {name: name, driveStyle: safe?"Normal":"Aggresive"}) } />
+
+                    <TouchableOpacity
+                        onPress={() => navigation.navigate('Logger', { name: name, driveStyle: safe ? "Normal" : "Aggressive" })}>
+                        <Text style={styles.submitButton}>DRIVE</Text>
+                    </TouchableOpacity>
+                    {/* <Button title="Start Journey" onPress={ ()=>navigation.navigate('Logger', {name: name, driveStyle: safe?"Normal":"Aggressive"}) } /> */}
                 </View>
             </View>
         </TouchableWithoutFeedback>
@@ -43,46 +64,88 @@ const styles = StyleSheet.create(
     {
         wrapper: {
             flex: 1,
-            backgroundColor: "#222"
+            backgroundColor: "#111",
+            padding: 20
         },
         container: {
-            padding: 30,
+            padding: 30
+        },
+
+        banner:{
+            marginVertical:70,
+        },
+
+        bannerTitle: {
+            fontSize: 55,
+            color: 'white',
+            fontWeight:'300'
+        },
+
+        bannerInfo: {
+            fontSize: 20,
+            color: 'white',
+            fontWeight:'300'
         },
         text: {
-            marginTop: 30,
             // backgroundColor:"#efb",
-            textAlignVertical:"bottom",
+            textAlignVertical: "bottom",
+            marginLeft:5,
             height: 50,
             color: 'white',
-            fontSize:20,
+            fontSize:25,
             borderRadius: 5,
+            fontWeight:'400'
         },
         textInput: {
             marginTop:20,
             height: 50,
-            paddingLeft:20,
-            color: 'white',
-            fontSize:20,
+            paddingHorizontal: 20,
+            color: 'black',
+            fontSize: 20,
+            fontWeight:'500',
             borderColor: '#555',
-            backgroundColor:'#222',
-            borderRadius: 5,
+            backgroundColor:'#C0DEDD',
+            borderRadius: 15,
             borderStyle: "solid",
             borderWidth:1
         },
         drivingStyleContainer: {
-            marginTop: 10,
-            marginBottom: 20,
+            backgroundColor: 'rgba(192,222,221,.23)',
+            marginVertical: 40,
             flexDirection: 'row',
-            justifyContent: 'space-between'
+            justifyContent: 'space-between',
+            borderRadius: 15,
         },
-        drivingStyleText:{
-            marginTop: 30,
-            // backgroundColor:"#efb",
-            textAlignVertical:"top",
+        drivingStyleText: {
+            paddingHorizontal:30,
+            textAlignVertical: "center",
             height: 50,
-            color: '#999',
+            color: '#eee',
             fontSize:20,
-            borderRadius: 5,
+            borderRadius: 15,
+        },
+        drivingStyleTextActive:{
+            backgroundColor: "rgba(230, 223, 241, 1)",
+            paddingHorizontal:30,
+            textAlignVertical:"center",
+            height: 50,
+            color: '#111',
+            fontSize:20,
+            borderRadius: 15,
+            fontWeight:'600'
+        },
+        submitButton: {
+            backgroundColor: '#D13524',
+            width: 130,
+            textAlign:'center',
+            alignSelf:'flex-end',
+            textAlignVertical: "center",
+            height: 50,
+            color: '#eee',
+            fontSize:25,
+            borderRadius: 15,
+            fontWeight: '600'
+
         }
     }
 )

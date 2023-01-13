@@ -1,14 +1,14 @@
 import { View, StyleSheet, Text } from "react-native";
+import { AntDesign, MaterialCommunityIcons } from '@expo/vector-icons';
 
 export default function Header() {
     return (
         <View style = {styles.header}>
             <View style={styles.headerLeft}>
-                <Text style={styles.headerText}>Drive-Sense</Text>
-                <Text style = {styles.headerSubtext}>Log sensor data while driving</Text>
+                <AntDesign name="github" size={30} color="white" />                
             </View>
             <View style = {styles.headerRight}>
-                {/* logo, small logo */}
+                <MaterialCommunityIcons name="steering" size={40} color="white" />
             </View>
         </View>
         
@@ -19,22 +19,13 @@ const styles = StyleSheet.create({
     header: {
         flexDirection: 'row',
         // backgroundColor: '#555',
-        height: 200,
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        padding: 30
     },
     headerLeft: {
         display: 'flex',
         justifyContent: 'flex-end',
-        padding: 20
-    },
-    headerText: {
-        fontSize: 45,
-        color: 'white',
-    },
-    headerSubtext: {
-        fontSize: 15,
-        fontWeight: 'bold',
-        color: '#aaa',
-        paddingLeft: 3
     },
     headerRight: {
         
