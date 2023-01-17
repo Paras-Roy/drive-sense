@@ -16,7 +16,7 @@ const Home = ({ navigation }) => {
                 <View style={styles.container}>
                     <View style={styles.banner}>
                         <Text style = {styles.bannerTitle}>Drive Sense</Text>
-                        <Text style = {styles.bannerInfo}>Log Driving Data</Text>
+                        <Text style = {styles.bannerInfo}>Collect Driving Data</Text>
                     </View>
                     <Text style={styles.text}>Enter Driver's Name</Text>
                     <TextInput
@@ -72,7 +72,7 @@ const styles = StyleSheet.create(
         },
 
         banner:{
-            marginVertical:70,
+            marginVertical:60,
         },
 
         bannerTitle: {
@@ -97,7 +97,7 @@ const styles = StyleSheet.create(
             fontWeight:'400'
         },
         textInput: {
-            marginTop:20,
+            marginTop:10,
             height: 50,
             paddingHorizontal: 20,
             color: 'black',
