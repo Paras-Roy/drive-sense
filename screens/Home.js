@@ -1,11 +1,44 @@
 import { useState } from "react";
-import { Text, View, StyleSheet, TextInput, TouchableWithoutFeedback, Keyboard, Button, TouchableOpacity,} from "react-native";
+import { Text, View, StyleSheet, TextInput, TouchableWithoutFeedback, Keyboard, Button, TouchableOpacity, PermissionsAndroid} from "react-native";
 import Header from "../components/header";
 
 const Home = ({ navigation }) => {
 
     const [name, setName] = useState("Guest")
     const [safe, setSafe] = useState(true)
+
+    const onSubmit = async () => {
+        try {
+            let isPermissionExternalStorage = await PermissionsAndroid.check(
+                PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+            )
+
+            if (!isPermissionExternalStorage)
+            {
+                const granted = await PermissionsAndroid.request(
+                    PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+                    {
+                        title: 'Storage permission needed',
+                        buttonNeutral: 'Ask Me Later',
+                        buttonPositive: 'OK',
+                        buttonNegative: 'Cancel'
+                    },
+                );
+                if (granted != PermissionsAndroid.RESULTS.granted)
+                {
+                    alert('Storage permission Denied')
+                }
+                }
+            navigation.navigate('Logger', { name: name, driveStyle: safe ? "Normal" : "Aggressive" })
+        }
+        catch (e)
+        {
+            // alert('Error while checking for storage permission')
+            
+            navigation.navigate('Logger', { name: name, driveStyle: safe ? "Normal" : "Aggressive" })
+            return;
+        }
+    }
 
     return (
         <TouchableWithoutFeedback onPress={() => {
@@ -50,7 +83,7 @@ const Home = ({ navigation }) => {
                     </View>
 
                     <TouchableOpacity
-                        onPress={() => navigation.navigate('Logger', { name: name, driveStyle: safe ? "Normal" : "Aggressive" })}>
+                        onPress={onSubmit}>
                         <Text style={styles.submitButton}>DRIVE</Text>
                     </TouchableOpacity>
                     {/* <Button title="Start Journey" onPress={ ()=>navigation.navigate('Logger', {name: name, driveStyle: safe?"Normal":"Aggressive"}) } /> */}

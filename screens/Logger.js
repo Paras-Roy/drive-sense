@@ -1,4 +1,4 @@
-import { Text, View, StyleSheet, TouchableOpacity, BackHandler, PermissionsAndroid } from "react-native";
+import { Text, View, StyleSheet, TouchableOpacity, BackHandler} from "react-native";
 import Header from "../components/header";
 import { Accelerometer, Gyroscope } from 'expo-sensors'
 import { useState, useEffect } from "react";
@@ -10,57 +10,59 @@ import * as Sharing from 'expo-sharing';
 const Logger = ({ route, navigation }) => {
 
     const style = route.params.driveStyle
+    //const style = 'Normal'
+    //
 
     //Code to handle sensor data logging and saving to csvData string
-    const [csvData, setCsvData] = useState("DateTime,AccX,AccY,AccZ,GyroX,GyroY,GyroZ,label\n")
-    const [accSubscription, setAccSubscription] = useState(null)
-    const [gyroSubscription, setGyroSubscription] = useState(null)
-    const [isSubscribed, setIsSubscribed] = useState(true)
+        const [csvData, setCsvData] = useState("DateTime,AccX,AccY,AccZ,GyroX,GyroY,GyroZ,label\n")
+        const [accSubscription, setAccSubscription] = useState(null)
+        const [gyroSubscription, setGyroSubscription] = useState(null)
+        const [isSubscribed, setIsSubscribed] = useState(true)
 
-    const [{ x, y, z }, setAccData] = useState({
-        x: 0,
-        y: 0,
-        z: 0,
-    });
+        const [{ x, y, z }, setAccData] = useState({
+            x: 0,
+            y: 0,
+            z: 0,
+        });
 
-    const [{ gx, gy, gz }, setGyroData] = useState({
-        gx: 0,
-        gy: 0,
-        gz: 0,
-    });
+        const [{ gx, gy, gz }, setGyroData] = useState({
+            gx: 0,
+            gy: 0,
+            gz: 0,
+        });
 
-    Accelerometer.setUpdateInterval(1000)
-    Gyroscope.setUpdateInterval(1000)
+        Accelerometer.setUpdateInterval(1000)
+        Gyroscope.setUpdateInterval(1000)
 
-    const subscribe = () => {
-        setAccSubscription(
-            Accelerometer.addListener(({ x, y, z }) => {
-                setAccData({ x, y, z });
-                setCsvData(prevData => prevData + `${Date()},${x},${y},${z},\n`);
-            })
-        )
-        setGyroSubscription(
-            Gyroscope.addListener(({ x: gx, y: gy, z: gz }) => {
-                setGyroData({ gx, gy, gz });
-                setCsvData(prevData => prevData + `${gx},${gy},${gz},${style}\n`);
-            })
-        )
-    }
-
-    const unsubscribe = () => {
-        if(isSubscribed){
-        accSubscription && accSubscription.remove()
-        setAccSubscription(null)
-        gyroSubscription && gyroSubscription.remove()
-        setGyroSubscription(null)
-            setIsSubscribed(false)  
+        const subscribe = () => {
+            setAccSubscription(
+                Accelerometer.addListener(({ x, y, z }) => {
+                    setAccData({ x, y, z });
+                    setCsvData(prevData => prevData + `${Date()},${x},${y},${z},`);
+                })
+            )
+            setGyroSubscription(
+                Gyroscope.addListener(({ x: gx, y: gy, z: gz }) => {
+                    setGyroData({ gx, gy, gz });
+                    setCsvData(prevData => prevData + `${gx},${gy},${gz},${style}\n`);
+                })
+            )
         }
-    }
 
-    useEffect(() => {
-        subscribe();
-            return () => unsubscribe();
-    }, []);
+        const unsubscribe = () => {
+            if(isSubscribed){
+            accSubscription && accSubscription.remove()
+            setAccSubscription(null)
+            gyroSubscription && gyroSubscription.remove()
+            setGyroSubscription(null)
+                setIsSubscribed(false)  
+            }
+        }
+
+        useEffect(() => {
+            subscribe();
+                return () => unsubscribe();
+        }, []);
 
     //Code to disable accidental back button press
     useEffect(() => {
@@ -71,6 +73,7 @@ const Logger = ({ route, navigation }) => {
     //Code for saving as CSV on submit
     const exportData = async() => {
         try {
+            navigation.navigate('Home');
             const fileName = FileSystem.documentDirectory + route.params.name + "-" + style + "-data.csv";
             FileSystem.writeAsStringAsync(fileName, csvData, { encoding: FileSystem.EncodingType.UTF8 }).then(() => {
                 Sharing.shareAsync(fileName);
@@ -84,41 +87,7 @@ const Logger = ({ route, navigation }) => {
           }
         
     }
-    const onSubmit = async () => {
-        try {
-            navigation.navigate('Home')
-            let isPermissionExternalStorage = await PermissionsAndroid.check(
-                PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-            )
-
-            if (!isPermissionExternalStorage)
-            {
-                const granted = await PermissionsAndroid.request(
-                    PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-                    {
-                        title: 'Storage permission needed',
-                        buttonNeutral: 'Ask Me Later',
-                        buttonPositive: 'OK',
-                        buttonNegative: 'Cancel'
-                    },
-                );
-                if (granted === PermissionsAndroid.RESULTS.granted)
-                {
-                    exportData()
-                }
-                else {
-                    alert('Storage permission Denied')
-                }
-            } else {
-                exportData()
-            }            
-        }
-        catch (e)
-        {
-            alert('Error while checking for storage permission')
-            return;
-        }
-    }
+    
     
     return (
         <View style={styles.wrapper}>
@@ -166,7 +135,7 @@ const Logger = ({ route, navigation }) => {
 
                 </View>
                 <TouchableOpacity
-                    onPress={onSubmit}>
+                    onPress={exportData}>
                     <Text style={styles.submit}>END DRIVE</Text>
                 </TouchableOpacity>
             </View>

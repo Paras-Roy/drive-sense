@@ -7,13 +7,13 @@ const Stack = createNativeStackNavigator();
 
 const StackNav = () => {
     return (
-            <NavigationContainer theme={DarkTheme}>
+        <NavigationContainer theme={DarkTheme}>
             <Stack.Navigator initialRouteName="Home" screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="Home" component={Home} />
-            <Stack.Screen name="Logger" component={Logger} />
+                <Stack.Screen name="Home" component={Home} />
+                <Stack.Screen name="Logger" component={Logger} />
             </Stack.Navigator>
         </NavigationContainer>
-     );
+    );
 }
- 
+
 export default StackNav;
